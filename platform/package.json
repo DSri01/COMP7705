@@ -1,0 +1,21 @@
+{
+  "name": "comp7705_platform",
+  "version": "1.0.0",
+  "description": "This subdirectory contains the implementation of the platform for COMP7705 capstone project.",
+  "main": "index.js",
+  "scripts": {
+    "dev:build": "docker compose -f dev.docker-compose.yml up --build -d",
+    "dev:up": "docker compose -f dev.docker-compose.yml up -d",
+    "dev:down": "docker compose -f dev.docker-compose.yml down",
+    "dev:clear": "docker compose -f dev.docker-compose.yml down -v",
+    "dev:psql-to-dev-db": "docker run --rm -it -e PGPASSWORD=postgres postgres:17.6-alpine3.22 psql -h host.docker.internal -p 65432 -U postgres -d comp7705",
+
+    "dev:db-dump": "docker run --rm -e PGPASSWORD=postgres -v ./_dbDumps:/dumps postgres:17.6-alpine3.22 sh -c \"pg_dump -h host.docker.internal -p 65432 -U postgres -d comp7705 -F p --clean --if-exists --no-owner --no-acl -f /dumps/comp7705db-dump-$(date +%Y%m%d%H%M%S).sql\"",
+    "dev:db-restore": "docker run --rm -e PGPASSWORD=postgres -v ./_dbDumps:/dumps postgres:17.6-alpine3.22 sh -c \"psql -h host.docker.internal -p 65432 -U postgres -d comp7705 -f /dumps/$1\" _",
+
+    "dev:db-dump-bin": "docker run --rm -e PGPASSWORD=postgres -v ./_dbDumps:/dumps postgres:17.6-alpine3.22 sh -c \"pg_dump -h host.docker.internal -p 65432 -U postgres -d comp7705 -F c --no-owner --no-acl -f /dumps/comp7705db-dump-$(date +%Y%m%d%H%M%S).dump\"",
+    "dev:db-restore-bin": "docker run --rm -e PGPASSWORD=postgres -v ./_dbDumps:/dumps postgres:17.6-alpine3.22 sh -c \"pg_restore -h host.docker.internal -p 65432 -U postgres -d comp7705 --clean --if-exists --no-owner --no-acl /dumps/$1\" _"
+  },
+  "author": "",
+  "license": "ISC"
+}

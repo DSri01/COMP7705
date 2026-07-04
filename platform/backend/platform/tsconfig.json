@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "module": "nodenext",
+      "esModuleInterop": true,
+      "target": "es2022",
+      "moduleResolution": "nodenext",
+      "sourceMap": true,
+      "outDir": "dist",
+      "rootDir": "src",
+      "strict": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "types": ["node"]
+    },
+    "include": [
+        "src/**/*"
+, "__tests__/server/projects/projects.controller.spec.ts", "__tests__/server/projects/projects.service.spec.ts"    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "__tests__/**/*"
+    ]
+  }

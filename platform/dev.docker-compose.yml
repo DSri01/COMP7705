@@ -1,0 +1,69 @@
+name: comp7705-dev-infrastructure
+
+services:
+  db:
+    image: postgres:17.6-alpine3.22
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: comp7705
+    ports:
+      - 65432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d comp7705"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: on-failure
+
+  container-scanner:
+    image: comp7705containerscanner:latest
+    build:
+      context: backend/container-scanner
+      dockerfile: docker/DockerFile
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend/platform/fs:/fs
+    restart: on-failure
+  
+  fs-scanner:
+    image: comp7705fsscanner:latest
+    build:
+      context: backend/container-scanner
+      dockerfile: docker/fs.DockerFile
+    command: ["true"]
+
+  backend:
+    image: comp7705platformbackend:latest
+    container_name: comp7705-platform-backend
+    build:
+      context: backend/platform
+      dockerfile: docker/DockerFile
+    volumes:
+      - ./backend/platform/fs:/app/fs
+      - ./backend/platform/.env:/app/.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+      container-scanner:
+        condition: service_started
+    restart: on-failure
+  
+  dashboard:
+    image: comp7705platformfrontend:latest
+    build:
+      context: frontend/
+      dockerfile: docker/DockerFile
+    ports:
+      - 12080:80
+    depends_on:
+      - backend
+    restart: on-failure
+
+volumes:
+  db_data:

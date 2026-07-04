@@ -1,0 +1,177 @@
+@import "tailwindcss";
+
+:root {
+  --app-bg: #0b0f14;
+  --surface: #121826;
+  --surface-elevated: #1a2233;
+  --border: #2b344a;
+  --text-primary: #f8faff;
+  --text-secondary: #d7e0f5;
+  --text-muted: #a9b6d3;
+  --accent-cyan: #5cc8ff;
+  --accent-violet: #b08cff;
+  --accent-magenta: #ff7be5;
+  --status-critical: #ff4d4f;
+  --status-high: #ff9f43;
+  --status-medium: #ffd166;
+  --status-low: #34d399;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at top, #1a2233 0%, #0b0f14 45%);
+  color: var(--text-primary);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border p-5 shadow-lg backdrop-blur-sm;
+    background-color: color-mix(in srgb, var(--surface) 92%, #000 8%);
+    border-color: color-mix(in srgb, var(--border) 85%, var(--accent-cyan) 15%);
+  }
+
+  .neon-link {
+    @apply transition-colors duration-200;
+    color: var(--accent-cyan);
+  }
+
+  .neon-link:hover {
+    color: var(--accent-violet);
+  }
+
+  .neon-button {
+    @apply rounded-md border px-4 py-2 font-medium transition-all duration-200;
+    border-color: color-mix(in srgb, var(--accent-cyan) 65%, white 35%);
+    color: var(--text-primary);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent-cyan) 30%, transparent 70%),
+      color-mix(in srgb, var(--accent-violet) 20%, transparent 80%)
+    );
+  }
+
+  .neon-button:hover {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--accent-cyan) 45%, transparent 55%);
+    border-color: var(--accent-violet);
+  }
+
+  .neon-input {
+    @apply w-full rounded-md border px-3 py-2 outline-none transition;
+    border-color: var(--border);
+    background-color: color-mix(in srgb, var(--surface) 94%, black 6%);
+    color: var(--text-primary);
+  }
+
+  .neon-input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-cyan) 25%, transparent 75%);
+  }
+
+  .markdown-body {
+    @apply break-words leading-relaxed;
+  }
+
+  .markdown-body > :first-child {
+    margin-top: 0;
+  }
+
+  .markdown-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .markdown-body p {
+    @apply my-2;
+  }
+
+  .markdown-body h1 {
+    @apply mt-4 mb-2 text-xl font-semibold;
+  }
+
+  .markdown-body h2 {
+    @apply mt-3 mb-2 text-lg font-semibold;
+  }
+
+  .markdown-body h3 {
+    @apply mt-3 mb-1 text-base font-semibold;
+  }
+
+  .markdown-body ul,
+  .markdown-body ol {
+    @apply my-2 pl-5;
+  }
+
+  .markdown-body ul {
+    @apply list-disc;
+  }
+
+  .markdown-body ol {
+    @apply list-decimal;
+  }
+
+  .markdown-body li {
+    @apply my-0.5;
+  }
+
+  .markdown-body blockquote {
+    @apply my-2 border-l-4 pl-3;
+    border-color: color-mix(in srgb, var(--accent-cyan) 50%, var(--border) 50%);
+    color: var(--text-secondary);
+  }
+
+  .markdown-body a {
+    color: var(--accent-cyan);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .markdown-body a:hover {
+    color: var(--accent-violet);
+  }
+
+  .markdown-body code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875em;
+  }
+
+  .markdown-body :not(pre) > code {
+    @apply rounded px-1 py-0.5;
+    background-color: color-mix(in srgb, var(--surface-elevated) 85%, black 15%);
+  }
+
+  .markdown-body pre {
+    @apply my-2 overflow-x-auto rounded-md border p-3 text-xs;
+    border-color: var(--border);
+    background-color: color-mix(in srgb, var(--surface-elevated) 90%, black 10%);
+  }
+
+  .markdown-body pre code {
+    @apply bg-transparent p-0;
+    font-size: inherit;
+  }
+
+  .markdown-body table {
+    @apply my-2 w-full border-collapse text-sm;
+  }
+
+  .markdown-body th,
+  .markdown-body td {
+    @apply border px-2 py-1 text-left;
+    border-color: var(--border);
+  }
+
+  .markdown-body th {
+    font-weight: 600;
+    color: var(--accent-cyan);
+  }
+
+  .markdown-body hr {
+    @apply my-4 border-0 border-t;
+    border-color: var(--border);
+  }
+}
