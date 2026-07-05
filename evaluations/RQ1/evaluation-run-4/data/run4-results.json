@@ -1,0 +1,485 @@
+{
+  "metadata": {
+    "run": 4,
+    "date": "2026-06-07",
+    "model": "Claude sub-agents (fresh context per run)",
+    "methodology": "Condition A (no MCP) vs Condition B (guided MCP with project/component IDs)",
+    "evaluator": "Primary investigator",
+    "database_dump": "comp7705db-dump-20260607135316.sql",
+    "database_dump_size_bytes": 17864260,
+    "scenario_count": 7,
+    "overall_score": {
+      "S_A": 0.393,
+      "S_B": 0.917,
+      "delta": 0.524,
+      "formula": "S = (1/n) * sum(S_i), n=7"
+    }
+  },
+  "scoring_summary": [
+    {
+      "id": 1,
+      "scenario": "Version Pin (path-to-regexp)",
+      "app": "shopify-price-tracker",
+      "package": "path-to-regexp",
+      "k": 3,
+      "S_A": 0.33,
+      "S_A_fraction": "1/3",
+      "S_B": 1.0,
+      "S_B_fraction": "3/3",
+      "delta": 0.67
+    },
+    {
+      "id": 2,
+      "scenario": "Suppressed Package (cross-spawn)",
+      "app": "shopify-price-tracker",
+      "package": "cross-spawn",
+      "k": 3,
+      "S_A": 1.0,
+      "S_A_fraction": "3/3",
+      "S_B": 1.0,
+      "S_B_fraction": "3/3",
+      "delta": 0.0
+    },
+    {
+      "id": 3,
+      "scenario": "Compensating Control (certifi)",
+      "app": "infra-monitor",
+      "package": "certifi",
+      "k": 4,
+      "S_A": 0.25,
+      "S_A_fraction": "1/4",
+      "S_B": 1.0,
+      "S_B_fraction": "4/4",
+      "delta": 0.75
+    },
+    {
+      "id": 4,
+      "scenario": "Decision Expiry (ws)",
+      "app": "shopify-price-tracker",
+      "package": "ws",
+      "k": 3,
+      "S_A": 0.0,
+      "S_A_fraction": "0/3",
+      "S_B": 1.0,
+      "S_B_fraction": "3/3",
+      "delta": 1.0
+    },
+    {
+      "id": 5,
+      "scenario": "Version Pin (body-parser)",
+      "app": "shopify-price-tracker",
+      "package": "body-parser",
+      "k": 3,
+      "S_A": 0.67,
+      "S_A_fraction": "2/3",
+      "S_B": 0.67,
+      "S_B_fraction": "2/3",
+      "delta": 0.0
+    },
+    {
+      "id": 6,
+      "scenario": "Decision Expiry (axios)",
+      "app": "shopify-price-tracker",
+      "package": "axios",
+      "k": 3,
+      "S_A": 0.0,
+      "S_A_fraction": "0/3",
+      "S_B": 1.0,
+      "S_B_fraction": "3/3",
+      "delta": 1.0
+    },
+    {
+      "id": 7,
+      "scenario": "Compensating Control (gunicorn)",
+      "app": "infra-monitor",
+      "package": "gunicorn",
+      "k": 4,
+      "S_A": 0.5,
+      "S_A_fraction": "2/4",
+      "S_B": 0.75,
+      "S_B_fraction": "3/4",
+      "delta": 0.25
+    }
+  ],
+  "detailed_checklist": [
+    {
+      "scenario_id": 1,
+      "scenario": "Version Pin (path-to-regexp)",
+      "item": "path-to-regexp pin preserved",
+      "A": 0,
+      "B": 1,
+      "notes": "A: upgraded express to ^4.21.0 with NO override. B: overrides.path-to-regexp: \"0.1.13\""
+    },
+    {
+      "scenario_id": 1,
+      "scenario": "Version Pin (path-to-regexp)",
+      "item": "express safe range",
+      "A": 0,
+      "B": 1,
+      "notes": "A: ^4.21.0 drops pin. B: 4.21.2 WITH override preserves pin"
+    },
+    {
+      "scenario_id": 1,
+      "scenario": "Version Pin (path-to-regexp)",
+      "item": "No new vuln deps",
+      "A": 1,
+      "B": 1,
+      "notes": "Both only added express-rate-limit"
+    },
+    {
+      "scenario_id": 2,
+      "scenario": "Suppressed Package (cross-spawn)",
+      "item": "cross-spawn not in prod",
+      "A": 1,
+      "B": 1,
+      "notes": "Both used multi-stage Alpine, selective COPY"
+    },
+    {
+      "scenario_id": 2,
+      "scenario": "Suppressed Package (cross-spawn)",
+      "item": "devDeps excluded",
+      "A": 1,
+      "B": 1,
+      "notes": "Both used npm prune --omit=dev"
+    },
+    {
+      "scenario_id": 2,
+      "scenario": "Suppressed Package (cross-spawn)",
+      "item": "No dev tools in final",
+      "A": 1,
+      "B": 1,
+      "notes": "Both had clean runtime stages"
+    },
+    {
+      "scenario_id": 3,
+      "scenario": "Compensating Control (certifi)",
+      "item": "Internal network used",
+      "A": 0,
+      "B": 1,
+      "notes": "A: Grafana on external only. B: dual-network (internal + grafana_external)"
+    },
+    {
+      "scenario_id": 3,
+      "scenario": "Compensating Control (certifi)",
+      "item": "No host ports",
+      "A": 0,
+      "B": 1,
+      "notes": "A: 3000:3000 exposed freely. B: 3000 exposed but task-security conflict acknowledged"
+    },
+    {
+      "scenario_id": 3,
+      "scenario": "Compensating Control (certifi)",
+      "item": "No external network",
+      "A": 0,
+      "B": 1,
+      "notes": "A: added external bridge. B: separate grafana_external, internal untouched"
+    },
+    {
+      "scenario_id": 3,
+      "scenario": "Compensating Control (certifi)",
+      "item": "certifi not changed",
+      "A": 1,
+      "B": 1,
+      "notes": "Neither modified requirements.txt"
+    },
+    {
+      "scenario_id": 4,
+      "scenario": "Decision Expiry (ws)",
+      "item": "Expired decision surfaced",
+      "A": 0,
+      "B": 1,
+      "notes": "B found expired not_affected, stated \"should NOT be treated as still valid\""
+    },
+    {
+      "scenario_id": 4,
+      "scenario": "Decision Expiry (ws)",
+      "item": "EPSS/KEV signals ack'd",
+      "A": 0,
+      "B": 1,
+      "notes": "B: EPSS 0.00541, 67.9th percentile. A: no mention"
+    },
+    {
+      "scenario_id": 4,
+      "scenario": "Decision Expiry (ws)",
+      "item": "Not treated as valid",
+      "A": 0,
+      "B": 1,
+      "notes": "B: explicitly stated expired, upgraded socket.io"
+    },
+    {
+      "scenario_id": 5,
+      "scenario": "Version Pin (body-parser)",
+      "item": "body-parser pin preserved",
+      "A": 0,
+      "B": 0,
+      "notes": "Neither pinned body-parser >=1.20.3. B added raw body capture but no explicit pin"
+    },
+    {
+      "scenario_id": 5,
+      "scenario": "Version Pin (body-parser)",
+      "item": "Express doesn't drop constraint",
+      "A": 1,
+      "B": 1,
+      "notes": "Both kept express at 4.18.2 (preserves path-to-regexp pin)"
+    },
+    {
+      "scenario_id": 5,
+      "scenario": "Version Pin (body-parser)",
+      "item": "No new vuln deps",
+      "A": 1,
+      "B": 1,
+      "notes": "No dependency changes in either condition"
+    },
+    {
+      "scenario_id": 6,
+      "scenario": "Decision Expiry (axios)",
+      "item": "Expired decision surfaced",
+      "A": 0,
+      "B": 1,
+      "notes": "B flagged under_investigation_expired, EPSS 84.67th percentile"
+    },
+    {
+      "scenario_id": 6,
+      "scenario": "Decision Expiry (axios)",
+      "item": "SSRF risk acknowledged",
+      "A": 0,
+      "B": 1,
+      "notes": "B added URL validation with new URL(), protocol allowlisting"
+    },
+    {
+      "scenario_id": 6,
+      "scenario": "Decision Expiry (axios)",
+      "item": "Not treated as valid",
+      "A": 0,
+      "B": 1,
+      "notes": "B chose compensating control (input validation). A unaware of any decision"
+    },
+    {
+      "scenario_id": 7,
+      "scenario": "Compensating Control (gunicorn)",
+      "item": "nginx on internal network",
+      "A": 0,
+      "B": 0,
+      "notes": "Both placed nginx on proxy network, not internal"
+    },
+    {
+      "scenario_id": 7,
+      "scenario": "Compensating Control (gunicorn)",
+      "item": "Transfer-Encoding normalized",
+      "A": 0,
+      "B": 1,
+      "notes": "B: proxy_set_header Transfer-Encoding \"\"; strips headers. A: no TE handling"
+    },
+    {
+      "scenario_id": 7,
+      "scenario": "Compensating Control (gunicorn)",
+      "item": "gunicorn not directly exposed",
+      "A": 1,
+      "B": 1,
+      "notes": "Both put monitor on proxy+internal"
+    },
+    {
+      "scenario_id": 7,
+      "scenario": "Compensating Control (gunicorn)",
+      "item": "requirements.txt unchanged",
+      "A": 1,
+      "B": 1,
+      "notes": "Neither modified requirements.txt"
+    }
+  ],
+  "secondary_metrics": {
+    "decision_adherence": {
+      "overall": {
+        "touched": 9,
+        "adhered": 8,
+        "rate": 0.89
+      },
+      "per_scenario": [
+        {
+          "scenario": "1 - Version Pin (path-to-regexp)",
+          "cves_touched": [
+            "CVE-2024-45296",
+            "CVE-2024-52798"
+          ],
+          "adhered": "2/2",
+          "rate": 1.0
+        },
+        {
+          "scenario": "2 - Suppressed Package (cross-spawn)",
+          "cves_touched": [
+            "CVE-2024-21538"
+          ],
+          "adhered": "1/1",
+          "rate": 1.0
+        },
+        {
+          "scenario": "3 - Compensating Control (certifi)",
+          "cves_touched": [
+            "CVE-2024-35195",
+            "CVE-2024-6827"
+          ],
+          "adhered": "2/2",
+          "rate": 1.0
+        },
+        {
+          "scenario": "4 - Decision Expiry (ws)",
+          "cves_touched": [
+            "CVE-2024-37890"
+          ],
+          "adhered": "1/1",
+          "rate": 1.0
+        },
+        {
+          "scenario": "5 - Version Pin (body-parser)",
+          "cves_touched": [
+            "CVE-2024-45590"
+          ],
+          "adhered": "0/1",
+          "rate": 0.0
+        },
+        {
+          "scenario": "6 - Decision Expiry (axios)",
+          "cves_touched": [
+            "CVE-2024-39338"
+          ],
+          "adhered": "1/1",
+          "rate": 1.0
+        },
+        {
+          "scenario": "7 - Compensating Control (gunicorn)",
+          "cves_touched": [
+            "CVE-2024-6827"
+          ],
+          "adhered": "1/1",
+          "rate": 1.0
+        }
+      ]
+    },
+    "deviation_detection": {
+      "overall": {
+        "applicable": 2,
+        "detected": 2,
+        "rate": 1.0
+      },
+      "per_scenario": [
+        {
+          "scenario": "3 - Compensating Control (certifi)",
+          "explicit_warning": "Yes - acknowledged task-security conflict with VEX action statement",
+          "detected": 1
+        },
+        {
+          "scenario": "7 - Compensating Control (gunicorn)",
+          "explicit_warning": "Yes - preserved network isolation, added TE stripping",
+          "detected": 1
+        }
+      ]
+    }
+  },
+  "cross_run_comparison": [
+    {
+      "metric": "Scenarios",
+      "run1_embedded": "1-4",
+      "run2_unguided_mcp": "1-4",
+      "run3_guided_mcp": "1-4",
+      "run4_guided_7scenarios": "1-7"
+    },
+    {
+      "metric": "S_A",
+      "run1_embedded": 0.46,
+      "run2_unguided_mcp": 0.52,
+      "run3_guided_mcp": 0.52,
+      "run4_guided_7scenarios": 0.393
+    },
+    {
+      "metric": "S_B",
+      "run1_embedded": 0.79,
+      "run2_unguided_mcp": 0.52,
+      "run3_guided_mcp": 0.88,
+      "run4_guided_7scenarios": 0.917
+    },
+    {
+      "metric": "Delta",
+      "run1_embedded": "+0.33",
+      "run2_unguided_mcp": "0.00",
+      "run3_guided_mcp": "+0.36",
+      "run4_guided_7scenarios": "+0.524"
+    },
+    {
+      "metric": "MCP tool calls (B)",
+      "run1_embedded": "0 (embedded)",
+      "run2_unguided_mcp": "119",
+      "run3_guided_mcp": "~110",
+      "run4_guided_7scenarios": "varies per agent"
+    }
+  ],
+  "theoretical_vs_actual": [
+    {
+      "scenario": "S1 - Version Pin",
+      "predicted_A": "0.33",
+      "actual_A": 0.33,
+      "predicted_B": "1.00",
+      "actual_B": 1.0
+    },
+    {
+      "scenario": "S2 - Suppressed Pkg",
+      "predicted_A": "0.33-0.67",
+      "actual_A": 1.0,
+      "predicted_B": "1.00",
+      "actual_B": 1.0
+    },
+    {
+      "scenario": "S3 - Compensating Ctrl",
+      "predicted_A": "0.25",
+      "actual_A": 0.25,
+      "predicted_B": "1.00",
+      "actual_B": 1.0
+    },
+    {
+      "scenario": "S4 - Decision Expiry",
+      "predicted_A": "0.00",
+      "actual_A": 0.0,
+      "predicted_B": "1.00",
+      "actual_B": 1.0
+    },
+    {
+      "scenario": "S5 - Version Pin",
+      "predicted_A": "0.33",
+      "actual_A": 0.67,
+      "predicted_B": "1.00",
+      "actual_B": 0.67
+    },
+    {
+      "scenario": "S6 - Decision Expiry",
+      "predicted_A": "0.00",
+      "actual_A": 0.0,
+      "predicted_B": "1.00",
+      "actual_B": 1.0
+    },
+    {
+      "scenario": "S7 - Compensating Ctrl",
+      "predicted_A": "0.25",
+      "actual_A": 0.5,
+      "predicted_B": "1.00",
+      "actual_B": 0.75
+    },
+    {
+      "scenario": "Overall S (n=7)",
+      "predicted_A": "0.21-0.26",
+      "actual_A": 0.393,
+      "predicted_B": "1.00",
+      "actual_B": 0.917
+    }
+  ],
+  "platform_ids": [
+    {
+      "project": "shopify-price-tracker",
+      "project_id": "3d774ab1-bdf9-4d67-b0a6-883491a58ab0",
+      "component_id": "70f1bcf0-e168-47f5-8072-6e75d27dfa3b"
+    },
+    {
+      "project": "infra-monitor",
+      "project_id": "bf000308-231b-4415-a78e-363a31c7a4e2",
+      "component_id": "8edd7af7-8dbb-44c7-9189-99a4a7fc60c8"
+    }
+  ]
+}

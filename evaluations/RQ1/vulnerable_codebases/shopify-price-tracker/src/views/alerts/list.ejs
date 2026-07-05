@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alerts - Price Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">Price Tracker</div>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="/products">Products</a>
+      <a href="/alerts">Alerts</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>Price Alerts</h1>
+
+    <form method="POST" action="/alerts" class="form-inline">
+      <select name="product_id" required>
+        <option value="">Select Product</option>
+      </select>
+      <select name="type" required>
+        <option value="below_threshold">Below Threshold</option>
+        <option value="price_change">Any Price Change</option>
+        <option value="back_in_stock">Back In Stock</option>
+      </select>
+      <input type="number" name="threshold" step="0.01" placeholder="Threshold ($)">
+      <button type="submit" class="btn">Create Alert</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Product</th><th>Type</th><th>Threshold</th><th>Status</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        <% alerts.forEach(a => { %>
+        <tr>
+          <td><%= a.product_name %></td>
+          <td><%= a.type.replace(/_/g, ' ') %></td>
+          <td><%= a.threshold ? '$' + a.threshold : '—' %></td>
+          <td><%= a.is_active ? 'Active' : 'Disabled' %></td>
+          <td><%= new Date(a.created_at).toLocaleString() %></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

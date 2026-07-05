@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infra Monitor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0d1117; color: #c9d1d9; }
+        nav { background: #161b22; padding: 0 2rem; display: flex; align-items: center; height: 48px; border-bottom: 1px solid #30363d; }
+        .nav-brand { color: #58a6ff; font-weight: 700; font-size: 1rem; }
+        .nav-links { margin-left: 2rem; display: flex; gap: 1.5rem; }
+        .nav-links a { color: #8b949e; text-decoration: none; font-size: 0.85rem; }
+        .nav-links a:hover { color: #f0f6fc; }
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat { background: #161b22; padding: 1.25rem; border-radius: 6px; border: 1px solid #30363d; text-align: center; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; }
+        .stat-label { font-size: 0.8rem; color: #8b949e; margin-top: 0.25rem; }
+        .up { color: #3fb950; }
+        .down { color: #f85149; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { text-align: left; padding: 0.6rem; border-bottom: 1px solid #21262d; font-size: 0.85rem; }
+        th { color: #8b949e; font-weight: 600; }
+        .section { background: #161b22; padding: 1.25rem; border-radius: 6px; border: 1px solid #30363d; margin-bottom: 1.5rem; }
+        .section h2 { font-size: 1rem; margin-bottom: 0.75rem; }
+        .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .badge-up { background: #1b3a1f; color: #3fb950; }
+        .badge-down { background: #3d1a1a; color: #f85149; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">Infra Monitor</div>
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/api/status">Status API</a>
+            <a href="/metrics">Metrics</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value up">{{ up_count }}</div>
+                <div class="stat-label">Services Up</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value down">{{ total_count - up_count }}</div>
+                <div class="stat-label">Services Down</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">{{ total_count }}</div>
+                <div class="stat-label">Total Monitored</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Current Status</h2>
+            <table>
+                <thead>
+                    <tr><th>Service</th><th>Status</th><th>Latency</th><th>Checked</th></tr>
+                </thead>
+                <tbody>
+                    {% for check in current_checks %}
+                    <tr>
+                        <td>{{ check.service }}</td>
+                        <td><span class="badge badge-{{ check.status }}">{{ check.status }}</span></td>
+                        <td>{{ check.get('latency_ms', '—') }}ms</td>
+                        <td>{{ check.get('checked_at', '—') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Recent Check History</h2>
+            {% if history %}
+            <p class="up">{{ history|length }} check runs recorded</p>
+            {% else %}
+            <p>No history yet. Checks run every 60 seconds.</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <script>
+        setTimeout(() => location.reload(), 30000);
+    </script>
+</body>
+</html>

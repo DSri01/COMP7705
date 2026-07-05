@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  monitor:
+    build: .
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379/0
+      - INTERNAL_SERVICES=postgres:5432,redis:6379,prometheus:9090
+      - CHECK_INTERVAL=60
+      - ALERT_WEBHOOK_URL=http://localhost:8080/webhook
+    depends_on:
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - internal
+
+  redis:
+    image: redis:7.2-alpine
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redisdata:/data
+    networks:
+      - internal
+
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - promdata:/prometheus
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+    internal: true
+
+volumes:
+  redisdata:
+  promdata:

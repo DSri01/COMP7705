@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= product.name %> - Price Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">Price Tracker</div>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="/products">Products</a>
+      <a href="/alerts">Alerts</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1><%= product.name %></h1>
+    <p><a href="<%= product.url %>" target="_blank"><%= product.url %></a></p>
+
+    <div class="detail-grid">
+      <div class="detail-card">
+        <h3>Current Price</h3>
+        <span class="price"><%= product.last_price ? '$' + product.last_price : '—' %></span>
+      </div>
+      <div class="detail-card">
+        <h3>Target Price</h3>
+        <span class="price">$<%= product.target_price %></span>
+      </div>
+    </div>
+
+    <% if (product.image_url) { %>
+    <section class="section">
+      <h3>Product Image</h3>
+      <img src="<%= product.image_url %>" alt="<%= product.name %>" style="max-width: 300px;">
+    </section>
+    <% } %>
+
+    <section class="section">
+      <h3>Price History</h3>
+      <% if (history.length > 0) { %>
+      <table>
+        <thead>
+          <tr><th>Old Price</th><th>New Price</th><th>Change</th><th>Detected</th></tr>
+        </thead>
+        <tbody>
+          <% history.forEach(h => { %>
+          <tr>
+            <td>$<%= h.old_price %></td>
+            <td>$<%= h.new_price %></td>
+            <td class="<%= h.new_price < h.old_price ? 'positive' : 'negative' %>">
+              <%= h.new_price < h.old_price ? '-' : '+' %>$<%= Math.abs(h.new_price - h.old_price).toFixed(2) %>
+            </td>
+            <td><%= new Date(h.detected_at).toLocaleString() %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <p>No price history yet.</p>
+      <% } %>
+    </section>
+
+    <div class="actions">
+      <form method="POST" action="/products/<%= product.id %>/check" style="display:inline">
+        <button type="submit" class="btn">Check Price Now</button>
+      </form>
+    </div>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    socket.on('price-update', (data) => {
+      if (data.productId === '<%= product.id %>') {
+        location.reload();
+      }
+    });
+  </script>
+</body>
+</html>

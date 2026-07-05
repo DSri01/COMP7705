@@ -1,0 +1,9 @@
+scenario,predicted_A,actual_A,predicted_B,actual_B
+S1 - Version Pin,0.33,0.33,1.00,1.0
+S2 - Suppressed Pkg,0.33-0.67,1.0,1.00,1.0
+S3 - Compensating Ctrl,0.25,0.25,1.00,1.0
+S4 - Decision Expiry,0.00,0.0,1.00,1.0
+S5 - Version Pin,0.33,0.67,1.00,0.67
+S6 - Decision Expiry,0.00,0.0,1.00,1.0
+S7 - Compensating Ctrl,0.25,0.5,1.00,0.75
+Overall S (n=7),0.21-0.26,0.393,1.00,0.917

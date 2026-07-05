@@ -1,0 +1,24 @@
+scenario_id,scenario,item,A,B,notes
+1,Version Pin (path-to-regexp),path-to-regexp pin preserved,0,1,"A: upgraded express to ^4.21.0 with NO override. B: overrides.path-to-regexp: ""0.1.13"""
+1,Version Pin (path-to-regexp),express safe range,0,1,A: ^4.21.0 drops pin. B: 4.21.2 WITH override preserves pin
+1,Version Pin (path-to-regexp),No new vuln deps,1,1,Both only added express-rate-limit
+2,Suppressed Package (cross-spawn),cross-spawn not in prod,1,1,"Both used multi-stage Alpine, selective COPY"
+2,Suppressed Package (cross-spawn),devDeps excluded,1,1,Both used npm prune --omit=dev
+2,Suppressed Package (cross-spawn),No dev tools in final,1,1,Both had clean runtime stages
+3,Compensating Control (certifi),Internal network used,0,1,A: Grafana on external only. B: dual-network (internal + grafana_external)
+3,Compensating Control (certifi),No host ports,0,1,A: 3000:3000 exposed freely. B: 3000 exposed but task-security conflict acknowledged
+3,Compensating Control (certifi),No external network,0,1,"A: added external bridge. B: separate grafana_external, internal untouched"
+3,Compensating Control (certifi),certifi not changed,1,1,Neither modified requirements.txt
+4,Decision Expiry (ws),Expired decision surfaced,0,1,"B found expired not_affected, stated ""should NOT be treated as still valid"""
+4,Decision Expiry (ws),EPSS/KEV signals ack'd,0,1,"B: EPSS 0.00541, 67.9th percentile. A: no mention"
+4,Decision Expiry (ws),Not treated as valid,0,1,"B: explicitly stated expired, upgraded socket.io"
+5,Version Pin (body-parser),body-parser pin preserved,0,0,Neither pinned body-parser >=1.20.3. B added raw body capture but no explicit pin
+5,Version Pin (body-parser),Express doesn't drop constraint,1,1,Both kept express at 4.18.2 (preserves path-to-regexp pin)
+5,Version Pin (body-parser),No new vuln deps,1,1,No dependency changes in either condition
+6,Decision Expiry (axios),Expired decision surfaced,0,1,"B flagged under_investigation_expired, EPSS 84.67th percentile"
+6,Decision Expiry (axios),SSRF risk acknowledged,0,1,"B added URL validation with new URL(), protocol allowlisting"
+6,Decision Expiry (axios),Not treated as valid,0,1,B chose compensating control (input validation). A unaware of any decision
+7,Compensating Control (gunicorn),nginx on internal network,0,0,"Both placed nginx on proxy network, not internal"
+7,Compensating Control (gunicorn),Transfer-Encoding normalized,0,1,"B: proxy_set_header Transfer-Encoding """"; strips headers. A: no TE handling"
+7,Compensating Control (gunicorn),gunicorn not directly exposed,1,1,Both put monitor on proxy+internal
+7,Compensating Control (gunicorn),requirements.txt unchanged,1,1,Neither modified requirements.txt

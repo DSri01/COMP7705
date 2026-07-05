@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://tracker:tracker@postgres:5432/pricing
+      - REDIS_URL=redis://redis:6379
+      - SESSION_SECRET=change-me-in-production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:15.4-alpine
+    environment:
+      - POSTGRES_USER=tracker
+      - POSTGRES_PASSWORD=tracker
+      - POSTGRES_DB=pricing
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracker -d pricing"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - backend
+
+  redis:
+    image: redis:7.2-alpine
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+  uploads:
+
+networks:
+  backend:
+    driver: bridge

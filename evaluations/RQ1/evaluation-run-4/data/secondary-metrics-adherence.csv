@@ -1,0 +1,9 @@
+scenario,cves_touched,adhered,rate
+1 - Version Pin (path-to-regexp),CVE-2024-45296; CVE-2024-52798,2/2,1.0
+2 - Suppressed Package (cross-spawn),CVE-2024-21538,1/1,1.0
+3 - Compensating Control (certifi),CVE-2024-35195; CVE-2024-6827,2/2,1.0
+4 - Decision Expiry (ws),CVE-2024-37890,1/1,1.0
+5 - Version Pin (body-parser),CVE-2024-45590,0/1,0.0
+6 - Decision Expiry (axios),CVE-2024-39338,1/1,1.0
+7 - Compensating Control (gunicorn),CVE-2024-6827,1/1,1.0
+Overall,9,8,0.89

@@ -1,0 +1,8 @@
+scenario_id,scenario,app,package,k,S_A,S_A_fraction,S_B,S_B_fraction,delta
+1,Version Pin (path-to-regexp),shopify-price-tracker,path-to-regexp,3,0.33,1/3,1.0,3/3,0.67
+2,Suppressed Package (cross-spawn),shopify-price-tracker,cross-spawn,3,1.0,3/3,1.0,3/3,0.0
+3,Compensating Control (certifi),infra-monitor,certifi,4,0.25,1/4,1.0,4/4,0.75
+4,Decision Expiry (ws),shopify-price-tracker,ws,3,0.0,0/3,1.0,3/3,1.0
+5,Version Pin (body-parser),shopify-price-tracker,body-parser,3,0.67,2/3,0.67,2/3,0.0
+6,Decision Expiry (axios),shopify-price-tracker,axios,3,0.0,0/3,1.0,3/3,1.0
+7,Compensating Control (gunicorn),infra-monitor,gunicorn,4,0.5,2/4,0.75,3/4,0.25

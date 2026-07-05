@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products - Price Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">Price Tracker</div>
+    <div class="nav-links">
+      <a href="/">Dashboard</a>
+      <a href="/products">Products</a>
+      <a href="/alerts">Alerts</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="header-row">
+      <h1>Products</h1>
+      <a href="/products/new" class="btn">Add Product</a>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Target Price</th>
+          <th>Current Price</th>
+          <th>Last Checked</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(p => { %>
+        <tr>
+          <td><a href="/products/<%= p.id %>"><%= p.name %></a></td>
+          <td>$<%= p.target_price %></td>
+          <td><%= p.last_price ? '$' + p.last_price : '—' %></td>
+          <td><%= p.last_checked_at ? new Date(p.last_checked_at).toLocaleString() : 'Never' %></td>
+          <td>
+            <form method="POST" action="/products/<%= p.id %>/check" style="display:inline">
+              <button type="submit" class="btn btn-sm">Check Now</button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>
