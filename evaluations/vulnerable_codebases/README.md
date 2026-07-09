@@ -1,4 +1,4 @@
 # `vulnerable_codebases`
 
-Intentionally vulnerable applications used as RQ1 evaluation fixtures.
+Intentionally vulnerable applications for RQ1 evaluation and the usability study.
 **Do not deploy or expose to a network.**
