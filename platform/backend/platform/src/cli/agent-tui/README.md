@@ -16,7 +16,7 @@ Tests mirror paths under `__tests__/cli/agent-tui/`.
 
 ```bash
 npm run cli:agent-tui
-npm run cli:agent-tui -- --base-url http://localhost:12080/agents
+npm run cli:agent-tui -- --base-url http://localhost:12080/api/agents
 ```
 
 Default base URL: `http://localhost:12080/api/agents`. Use `SET-BASE-URL` at the `agent>` prompt

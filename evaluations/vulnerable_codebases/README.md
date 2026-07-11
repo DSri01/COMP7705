@@ -16,7 +16,9 @@ The RQ1 evaluation used `shopify-price-tracker` and `infra-monitor` across seven
 
 ### Dashboard triage usability study
 
-The usability study used `vuln-target-small/` and `health-monitor-eval.tar`. Participants had access to both the source and the container image archive.
+The usability study used `vuln-target-small/` and `health-monitor-eval.tar`. Participants had access
+to both the source and the container image archive. Study materials and responses are described in
+[`evaluations/usability_study/`](../usability_study/README.md).
 
 ## Container image archives
 

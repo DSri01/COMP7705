@@ -8,9 +8,9 @@ from tool paths; there is no barrel re-export.
 |--------------|------|
 | `general/` | Stateless helpers (`convert-unix-time`, …) |
 | `subagents/` | Wrappers around compiled task agent graphs |
-| `db/read/` | Adapters over {@link ../../platform-read-tools/README.md platform-read-tools} |
+| `db/read/` | Adapters over [platform-read-tools](../../platform-read-tools/README.md) |
 | `db/write/` | Adapters over `platform-write-tools/` |
-| `db/context.ts` | {@link db/context.PlatformDbToolContext} for read/write factories |
+| `db/context.ts` | `db/context.PlatformDbToolContext` for read/write factories |
 | `web/` | `web_search`, `web_fetch_url_markdown` |
 | `ssvc/` | CISA SSVC lookup tools |
 
